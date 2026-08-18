@@ -1,0 +1,29 @@
+name: Munchkin Online CI
+
+on:
+  push:
+    branches: [munchkin-online]
+    paths:
+      - 'munchkin-online/**'
+      - '.github/workflows/munchkin-online.yml'
+  pull_request:
+    paths:
+      - 'munchkin-online/**'
+      - '.github/workflows/munchkin-online.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: munchkin-online
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: munchkin-online/package.json
+      - run: npm install
+      - run: node --check server.js
+      - run: node --check public/app.js
